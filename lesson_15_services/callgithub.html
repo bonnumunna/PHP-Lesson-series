@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <h1>Calling JSON Files</h1>
+    <ul id="details"></ul>
+    <br><br><br>
+    <button id="btn" onclick="callDetails(this)">Call Details</button>
+
+
+    <script>
+        function callDetails(x) {
+            // create xmlhttprequest object
+            var ajax = new XMLHttpRequest();
+            var method = "GET";
+            var url = "https://api.github.com/users";
+            ajax.open(method, url);
+            // set http request headers
+            ajax.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            // check for change in window state
+            ajax.onreadystatechange = function() {
+                // check if all is well
+                if (ajax.readyState == 4 && ajax.status == 200) {
+                    var response = ajax.responseText;
+                    console.log(response);
+                    var obj = JSON.parse(response)
+                        // console.log(obj);
+                        // console.log(obj.length);
+
+                    // var output = "";
+                    // for (var i = 0; i < obj.length; i++) {
+                    //     // console.log(obj[i].name + " : " + obj[i].location);
+                    //     output += "<li>" + obj[i].name + " : " + obj[i].location + "</li>";
+
+                    //     document.getElementById("details").innerHTML = output;
+                    // }
+
+                    /*  CALLING EXTERNAL GITHUB RESOURCE */
+                    var output = "";
+                    for (var i = 0; i < obj.length; i++) {
+
+                        output += "<li>obj.login</li>";
+
+                        document.getElementById("details").innerHTML = output;
+                    }
+                }
+            }
+            ajax.send();
+            x.innerText = "Loading...";
+        }
+    </script>
+</body>
+
+</html>

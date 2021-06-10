@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../bootstrap-4.6.0/css/bootstrap.min.css">
+    <title>AJAX | SERVICE</title>
+</head>
+<style>
+    .form-container {
+        width: 400px;
+    }
+</style>
+
+<body>
+    <div class="row justify-content-center">
+        <div class="form-container">
+            <div class="form-group">
+                <label for="category">Category</label>
+                <input type="text" id="category" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="author">Author</label>
+                <input type="text" id="author" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="tweet">Tweet</label>
+                <textarea id="tweet" rows="4" class="form-control" maxlength="100"></textarea>
+            </div>
+            <button type="button" onclick="submitForm()" class="btn btn-primary p-2 mr-2" id="report">Submit</button>
+        </div>
+    </div>
+    <script>
+        function submitForm() {
+
+            var cat = document.getElementById("category").value;
+            var aut = document.getElementById("author").value;
+            var tweet = document.getElementById("tweet").value;
+            var report = document.getElementById("report");
+
+            // CHECK FOR EMPTY FIELDS
+            if (cat != "" && aut != "" && tweet != "") {
+                // alert("Form submitted");
+                // CREATE XMLHttpReqest OBJECT FOR AJAX
+                var ajax = new XMLHttpRequest();
+
+                var method = "POST";
+                var url = "service.php";
+                // MAKE AJAX CALL
+                ajax.open(method, url);
+                // SET REQUEST HEADER
+                ajax.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+                ajax.onreadystatechange = function() {
+                    if (ajax.status == 200 && ajax.readyState == 4) {
+                        var res = ajax.responseText;
+                        // console.log(res);
+                        if (res == "data_inserted") {
+                            report.innerHTML = "<small style='color: white;'>Data inserted</small>";
+                        } else {
+                            report.innerHTML = "<small style='color: crimson;'>Data not inserted</small>";
+                        }
+                    }
+                }
+
+                // SEND THE DATA
+                ajax.send("tweet=" + tweet + "&cat=" + cat + "&aut=" + aut);
+                // NOTIFY USER OF PROGRESS
+                report.innerHTML = "<small style='color: skyblue;'>Please wait...</small>";
+            } else {
+                report.innerHTML = "<small style='color: red;'>Please fill all fields</small>";
+            }
+        }
+    </script>
+</body>
+
+</html>
